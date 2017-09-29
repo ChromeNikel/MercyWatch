@@ -104,10 +104,9 @@ namespace Mercywatch
 
         }
 
-        private async void Form1_Load(object sender, EventArgs e)
+        private void Form1_Load(object sender, EventArgs e)
         {
             UpdateMercyAsync();
-            //loadToTable();
         }
 
         private void button1_Click_1(object sender, EventArgs e)
@@ -115,7 +114,7 @@ namespace Mercywatch
 
         }
 
-        private async void timer1_Tick(object sender, EventArgs e)
+        private void timer1_Tick(object sender, EventArgs e)
         {
 
             UpdateMercyAsync();
@@ -124,7 +123,8 @@ namespace Mercywatch
 
         }
         public void UpdateMercyAsync()
-        {            
+        {
+          
             OwerParser pr = new OwerParser();
             WebClientEx wc = new WebClientEx();
             string nameNtag;
@@ -152,7 +152,7 @@ namespace Mercywatch
                     }
                     player.Heroes = hers;
                     pls.Add(player);
-                }
+                }                
             }
             
             var names = pls.Select(c => c.Name).ToArray();
@@ -245,11 +245,7 @@ namespace Mercywatch
             //        .Select(c => c.Heroes = player.Heroes);
             //}
             //db.SaveChanges();
-        }
-        public void loadToTable()
-        {
-           
-        }
+        }       
 
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
         {
