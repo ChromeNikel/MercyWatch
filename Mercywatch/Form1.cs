@@ -18,9 +18,7 @@ using System.Xml.Serialization;
 namespace Mercywatch
 {
     public partial class Form1 : Form
-    {
-        OwerParser pr = new OwerParser();
-        WebClientEx wc = new WebClientEx();
+    {                
         string playersLink;
         
         public Form1()
@@ -33,6 +31,8 @@ namespace Mercywatch
         {
             if (textBox1.Text != "")
             {
+                WebClientEx wc = new WebClientEx();
+                OwerParser pr = new OwerParser();
                 playersLink = textBox1.Text;
 
                 if (radioButton1.Checked == true)
@@ -109,22 +109,13 @@ namespace Mercywatch
             UpdateMercyAsync();
         }
 
-        private void button1_Click_1(object sender, EventArgs e)
-        {
-
-        }
-
         private void timer1_Tick(object sender, EventArgs e)
         {
-
             UpdateMercyAsync();
-
-           // loadToTable();
-
         }
+
         public void UpdateMercyAsync()
-        {
-          
+        {          
             OwerParser pr = new OwerParser();
             WebClientEx wc = new WebClientEx();
             string nameNtag;
