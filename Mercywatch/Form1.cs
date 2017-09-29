@@ -130,6 +130,10 @@ namespace Mercywatch
                 {
                     nameNtag = fr.ReadLine();
                     string playersLink = "https://www.overbuff.com/players/pc/" + nameNtag.Replace('#', '-') + "?mode=competitive";
+                    ///магия после того, как добавил эти две строки рейтинг обновился, но взоможно они ничего и не исправили, нужно тестить еще
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+                    var s = wc.DownloadString(playersLink);
+                    ///
                     IHtmlDocument doc = pr.Connect(wc, playersLink);
                     Player player = new Player();
                     player.Name = nameNtag.Substring(0, nameNtag.IndexOf('#'));
