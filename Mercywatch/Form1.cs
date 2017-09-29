@@ -22,10 +22,10 @@ namespace Mercywatch
         OwerParser pr = new OwerParser();
         WebClientEx wc = new WebClientEx();
         string playersLink;
-        ModelMercyWatchContainer db;
+        
         public Form1()
         {
-            db = new ModelMercyWatchContainer();
+           
             InitializeComponent();
         }
 
@@ -44,24 +44,13 @@ namespace Mercywatch
                     float winRate = pr.GetWinRate("dl:nth-child(5)", doc);
                     string tag = pr.GetTag("div.layout-header-primary-bio", doc);
                     Dictionary<string, string> dic = pr.GetHeroRank("div.group.special .stat:nth-child(1) .value span", "div.group.normal div.name a.color-white", doc);
-                    Players pls = new Players();
-                    pls.Name = name;
-                    pls.Tag = tag;
-                    pls.Rate = rate.ToString();
-                    pls.WinRate = winRate.ToString();
-                    Collection<Heroes> hers = new Collection<Heroes>();
-                    foreach (var item in dic)
+                    string path = @"nameNtags.txt";
+                    using (FileStream fstream = new FileStream(path, FileMode.Append))
                     {
-                        Heroes her = new Heroes();
-                        her.Name = item.Key.ToString();
-                        her.WinRate = item.Value;
-                        hers.Add(her);
-                    }
-                    pls.Heroes = hers;
-                    db.PlayersSet.Add(pls);
-                    db.SaveChanges();
-                   
-
+                        System.IO.StreamWriter textFile = new System.IO.StreamWriter(fstream);
+                        textFile.WriteLine(name + tag);
+                        textFile.Close();
+                    }    
                 }
                 else if (radioButton2.Checked == true)
                 {
@@ -110,13 +99,15 @@ namespace Mercywatch
 
                 }
             }
-            
+
+            textBox1.Text = string.Empty;
 
         }
 
         private async void Form1_Load(object sender, EventArgs e)
         {
-            loadToTable();
+            UpdateMercyAsync();
+            //loadToTable();
         }
 
         private void button1_Click_1(object sender, EventArgs e)
@@ -129,59 +120,43 @@ namespace Mercywatch
 
             UpdateMercyAsync();
 
-            loadToTable();
+           // loadToTable();
 
         }
         public void UpdateMercyAsync()
-        {
-            ModelMercyWatchContainer db = new ModelMercyWatchContainer();
+        {            
             OwerParser pr = new OwerParser();
             WebClientEx wc = new WebClientEx();
-            foreach (var item in db.PlayersSet)
+            string nameNtag;
+            Collection<Player> pls = new Collection<Player>();
+            using (FileStream fstream = new FileStream("nameNtags.txt", FileMode.Open))
             {
-                Players player = item;
-                string playersLink = "https://www.overbuff.com/players/pc/" + player.Name + player.Tag.Replace('#', '-') + "?mode=competitive";
-                IHtmlDocument doc = pr.Connect(wc, playersLink);
-                player.Rate = pr.GetCompetetiveRate("span.color-stat-rating", doc).ToString();
-                player.WinRate = pr.GetWinRate("dl:nth-child(5)", doc).ToString();
-                Dictionary<string, string> dic = pr.GetHeroRank("div.group.special .stat:nth-child(1) .value span", "div.group.normal div.name a.color-white", doc);
-                foreach (var itemdic in dic)
+                StreamReader fr = new StreamReader(fstream);
+                while (!fr.EndOfStream)
                 {
-                    Heroes her = new Heroes();
-                    her.Name = itemdic.Key.ToString();
-                    her.WinRate = itemdic.Value;
-                    bool a = false;
-                    foreach (var itemher in player.Heroes)
+                    nameNtag = fr.ReadLine();
+                    string playersLink = "https://www.overbuff.com/players/pc/" + nameNtag.Replace('#', '-') + "?mode=competitive";
+                    IHtmlDocument doc = pr.Connect(wc, playersLink);
+                    Player player = new Player();
+                    player.Name = nameNtag.Substring(0, nameNtag.IndexOf('#'));
+                    player.Rate = pr.GetCompetetiveRate("span.color-stat-rating", doc).ToString();
+                    player.WinRate = pr.GetWinRate("dl:nth-child(5)", doc).ToString();
+                    Dictionary<string, string> dic = pr.GetHeroRank("div.group.special .stat:nth-child(1) .value span", "div.group.normal div.name a.color-white", doc);
+                    Collection<Hero> hers = new Collection<Hero>();
+                    foreach (var itemdic in dic)
                     {
-                        if (itemher.Name.Contains(her.Name))
-                        {
-                            a = true;
-                        }
+                        Hero her = new Hero();
+                        her.Name = itemdic.Key.ToString();
+                        her.WinRate = itemdic.Value;
+                        hers.Add(her);
                     }
-                    if (a)
-                    {
-                        player.Heroes.Where(c => c.Name == her.Name).Select(c => c.WinRate = her.WinRate);
-                    }
-                    else
-                        player.Heroes.Add(her);
+                    player.Heroes = hers;
+                    pls.Add(player);
                 }
-
-                db.PlayersSet.Where(c => c.Id == player.Id).AsEnumerable()
-                    .Select(c => c.Rate = player.Rate);
-                db.PlayersSet.Where(c => c.Id == player.Id).AsEnumerable()
-                    .Select(c => c.WinRate = player.WinRate);
-                db.PlayersSet.Where(c => c.Id == player.Id).AsEnumerable()
-                    .Select(c => c.Heroes = player.Heroes);
             }
-            db.SaveChanges();
-        }
-        public void loadToTable()
-        {
-            dataGridView1.Rows.Clear();
-            dataGridView1.Columns.Clear();
-            Dictionary<string, string> tableRate = new Dictionary<string, string>();
-            var names = db.PlayersSet.Select(c => c.Name).ToArray();
-            var rates = db.PlayersSet.Select(c => c.Rate).ToArray();
+            
+            var names = pls.Select(c => c.Name).ToArray();
+            var rates = pls.Select(c => c.Rate).ToArray();
             for (int i = 0; i < names.Length; i++)
             {
                 for (int j = 0; j < names.Length; j++)
@@ -197,7 +172,6 @@ namespace Mercywatch
                     }
                 }
             }
-
             dataGridView1.Columns.Add("Рейтинг", "Рейтинг");
 
             for (int i = 0; i < names.Count(); i++)
@@ -233,6 +207,48 @@ namespace Mercywatch
                     }
                 }
             }
+
+            //    foreach (var item in db.PlayersSet)
+            //{
+            //    Players player = item;
+            //    string playersLink = "https://www.overbuff.com/players/pc/" + player.Name + player.Tag.Replace('#', '-') + "?mode=competitive";
+            //    IHtmlDocument doc = pr.Connect(wc, playersLink);
+            //    player.Rate = pr.GetCompetetiveRate("span.color-stat-rating", doc).ToString();
+            //    player.WinRate = pr.GetWinRate("dl:nth-child(5)", doc).ToString();
+            //    Dictionary<string, string> dic = pr.GetHeroRank("div.group.special .stat:nth-child(1) .value span", "div.group.normal div.name a.color-white", doc);
+            //    foreach (var itemdic in dic)
+            //    {
+            //        Heroes her = new Heroes();
+            //        her.Name = itemdic.Key.ToString();
+            //        her.WinRate = itemdic.Value;
+            //        bool a = false;
+            //        foreach (var itemher in player.Heroes)
+            //        {
+            //            if (itemher.Name.Contains(her.Name))
+            //            {
+            //                a = true;
+            //            }
+            //        }
+            //        if (a)
+            //        {
+            //            player.Heroes.Where(c => c.Name == her.Name).Select(c => c.WinRate = her.WinRate);
+            //        }
+            //        else
+            //            player.Heroes.Add(her);
+            //    }
+
+            //    db.PlayersSet.Where(c => c.Id == player.Id).AsEnumerable()
+            //        .Select(c => c.Rate = player.Rate);
+            //    db.PlayersSet.Where(c => c.Id == player.Id).AsEnumerable()
+            //        .Select(c => c.WinRate = player.WinRate);
+            //    db.PlayersSet.Where(c => c.Id == player.Id).AsEnumerable()
+            //        .Select(c => c.Heroes = player.Heroes);
+            //}
+            //db.SaveChanges();
+        }
+        public void loadToTable()
+        {
+           
         }
 
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
