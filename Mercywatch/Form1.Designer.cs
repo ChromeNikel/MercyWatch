@@ -39,7 +39,6 @@
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.panel1 = new System.Windows.Forms.Panel();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.heroesBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.playersBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -76,10 +75,10 @@
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.ColumnHeader;
             this.dataGridView1.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllHeaders;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(32, 140);
+            this.dataGridView1.Location = new System.Drawing.Point(92, 116);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowTemplate.Height = 24;
-            this.dataGridView1.Size = new System.Drawing.Size(793, 314);
+            this.dataGridView1.Size = new System.Drawing.Size(793, 191);
             this.dataGridView1.TabIndex = 2;
             // 
             // radioButton1
@@ -109,40 +108,28 @@
             // panel1
             // 
             this.panel1.Controls.Add(this.dataGridView2);
-            this.panel1.Controls.Add(this.linkLabel1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 129);
+            this.panel1.Location = new System.Drawing.Point(0, 122);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1006, 488);
+            this.panel1.Size = new System.Drawing.Size(982, 227);
             this.panel1.TabIndex = 5;
             this.panel1.Visible = false;
             // 
             // dataGridView2
             // 
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Location = new System.Drawing.Point(46, 74);
+            this.dataGridView2.Location = new System.Drawing.Point(57, 40);
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.RowTemplate.Height = 24;
             this.dataGridView2.Size = new System.Drawing.Size(837, 145);
             this.dataGridView2.TabIndex = 4;
-            // 
-            // linkLabel1
-            // 
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.linkLabel1.Location = new System.Drawing.Point(339, 24);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(141, 29);
-            this.linkLabel1.TabIndex = 3;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "РакиДушат";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(1006, 617);
+            this.ClientSize = new System.Drawing.Size(982, 349);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.radioButton2);
             this.Controls.Add(this.dataGridView1);
@@ -156,7 +143,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.playersBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -175,7 +161,6 @@
         private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.DataGridView dataGridView2;
     }
 }

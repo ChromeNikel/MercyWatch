@@ -6,12 +6,14 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 
 namespace Mercywatch
 {
@@ -58,6 +60,8 @@ namespace Mercywatch
                     pls.Heroes = hers;
                     db.PlayersSet.Add(pls);
                     db.SaveChanges();
+                   
+
                 }
                 else if (radioButton2.Checked == true)
                 {
@@ -262,13 +266,20 @@ namespace Mercywatch
             string[] arrayNames = new string[100];
             int i = 0;
             string name = "";
-            while (order.IndexOf('(') != -1 && i < 15)
+            while (order.IndexOf('(') != -1)
             {
-                name = order.Substring(order.IndexOf('('));
-                arrayNames[i] = name.Substring(1, name.IndexOf(')') - 1);
+                name = order.Substring(order.IndexOf('(') + 1);
+                arrayNames[i] = name.Substring(0, name.IndexOf(')'));
                 arrayNames[i] = arrayNames[i].Trim();
                 arrayNames[i] = Uri.EscapeDataString(arrayNames[i]);
-                order = name.Substring(name.IndexOf('\n') + 1);
+                if (name.IndexOf('\n') != -1)
+                {
+                    order = name.Substring(name.IndexOf('\n'));
+                }
+                else
+                {
+                    break;
+                }
                 i++;
             }
            

@@ -130,13 +130,15 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <CustomToolNamespace>Resource</CustomToolNamespace>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EntityDeploy Include="ModelMercyWatch.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
@@ -197,6 +199,9 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ModelMercyWatch.cs</LastGenOutput>
       <DependentUpon>ModelMercyWatch.edmx</DependentUpon>
+    </Content>
+    <Content Include="XMLFileBase.xml">
+      <CustomToolNamespace>Reso</CustomToolNamespace>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
