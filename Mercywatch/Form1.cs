@@ -53,21 +53,26 @@ namespace Mercywatch
                     }    
                 }
                 else if (radioButton2.Checked == true)
-                {
+                {                    
+                    Collection<int> rates = new Collection<int>();
                     var namesNtags = getNameNTags(playersLink);
+
                     for (int i = 0; i < namesNtags.Count(); i++)
                     {
                         if (namesNtags[i] == null)
                         {
                             break;
                         }
+
                         playersLink = "https://www.overbuff.com/players/pc/" + namesNtags[i].Replace('#', '-') + "?mode=competitive";
                         IHtmlDocument doc = pr.Connect(wc, playersLink);
                         int rate = pr.GetCompetetiveRate("span.color-stat-rating", doc);
+                        rates.Add(rate);
                         string name = pr.GetName("div.layout-header-primary-bio", doc);
                         float winRate = pr.GetWinRate("dl:nth-child(5)", doc);
                         string tag = pr.GetTag("div.layout-header-primary-bio", doc);
                         Dictionary<string, string> dic = pr.GetHeroRank("div.group.special .stat:nth-child(1) .value span", "div.group.normal div.name a.color-white", doc);
+
                         dataGridView2.Columns.Add(name, name);
                         if (dataGridView2.Rows.Count < 3)
                         {
@@ -96,12 +101,10 @@ namespace Mercywatch
                         }
                         Application.DoEvents();
                     }
-
+                   linkLabel1.Text = "Средний рейтинг - " + getAverageRate(rates.ToArray()).ToString();
                 }
             }
-
             textBox1.Text = string.Empty;
-
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -130,7 +133,7 @@ namespace Mercywatch
                     IHtmlDocument doc = pr.Connect(wc, playersLink);
                     Player player = new Player();
                     player.Name = nameNtag.Substring(0, nameNtag.IndexOf('#'));
-                    player.Rate = pr.GetCompetetiveRate("span.color-stat-rating", doc).ToString();
+                    player.Rate = pr.GetCompetetiveRate("div.layout-header-secondary dl dd span.color-stat-rating", doc).ToString();
                     player.WinRate = pr.GetWinRate("dl:nth-child(5)", doc).ToString();
                     Dictionary<string, string> dic = pr.GetHeroRank("div.group.special .stat:nth-child(1) .value span", "div.group.normal div.name a.color-white", doc);
                     Collection<Hero> hers = new Collection<Hero>();
@@ -165,12 +168,15 @@ namespace Mercywatch
             }
             dataGridView1.Columns.Add("Рейтинг", "Рейтинг");
 
-            for (int i = 0; i < names.Count(); i++)
+            if (names.Length > dataGridView1.Columns.Count - 1)
             {
-                dataGridView1.Columns.Add(names[i], names[i]);
-                dataGridView1.Rows.Add();
-                dataGridView1.Rows[i].HeaderCell.Value = names[i];
-            }
+                for (int i = 0; i < names.Count(); i++)
+                {
+                    dataGridView1.Columns.Add(names[i], names[i]);
+                    dataGridView1.Rows.Add();
+                    dataGridView1.Rows[i].HeaderCell.Value = names[i];
+                }
+            }           
             for (int j = 0; j < rates.Length; j++)
             {
                 dataGridView1.Rows[j].Cells[0].Value = rates[j];
@@ -206,9 +212,7 @@ namespace Mercywatch
                 dataGridView1.Visible = false;
                 panel1.Visible = true;
                 buttonAddPlayer.Text = "Добавить команду";
-                //string link = "https://vk.com/topic-147810875_35816122";                
-                //var conn = pr.Connect(wc, link);
-                //string[] team = pr.getTeamFromVK(".bp_text", conn);
+                button1.Visible = false;
             }
         }
 
@@ -217,6 +221,7 @@ namespace Mercywatch
             if (radioButton1.Checked == true)
             {
                 buttonAddPlayer.Text = "Добавить нового игрока";
+                button1.Visible = true;
                 timer1.Enabled = true;
                 dataGridView1.Visible = true;
                 panel1.Visible = false;
@@ -252,6 +257,18 @@ namespace Mercywatch
         private void button1_Click_2(object sender, EventArgs e)
         {
             UpdateMercyAsync();
+        }
+
+        public double getAverageRate(int [] rates)
+        {
+            if (rates.Length > 0)
+            {
+                return rates.Average();
+            }
+            else
+            {
+                return 0;
+            }             
         }
     }
 
