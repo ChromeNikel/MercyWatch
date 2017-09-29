@@ -5,14 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Mercywatch
 {
     class OwerParser : IParser
-    {
-       private IHtmlDocument doc;
-         
+    {     
         public IHtmlDocument Connect(WebClientEx wc, string playersLink)
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
