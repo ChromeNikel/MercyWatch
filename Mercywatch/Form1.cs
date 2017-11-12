@@ -47,7 +47,10 @@ namespace Mercywatch
                     }    
                 }
                 else if (radioButton2.Checked == true)
-                {                    
+                {
+                    while(dataGridView2.ColumnCount > 0)
+                    dataGridView2.Columns.RemoveAt(dataGridView2.ColumnCount - 1);
+
                     Collection<int> rates = new Collection<int>();
                     var namesNtags = getNameNTags(playersLink);
 
@@ -228,7 +231,6 @@ namespace Mercywatch
 
         public string[] getNameNTags(string order)
         {
-
             string[] arrayNames = new string[100];
             int i = 0;
             string name = "";
