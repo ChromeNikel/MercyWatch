@@ -167,7 +167,10 @@ namespace Mercywatch
                     }
                 }
             }
-            dataGridView1.Columns.Add("Рейтинг", "Рейтинг");
+            if (dataGridView1.ColumnCount < 1)
+            {
+                dataGridView1.Columns.Add("Рейтинг", "Рейтинг");
+            }           
 
             if (names.Length > dataGridView1.Columns.Count - 1)
             {
